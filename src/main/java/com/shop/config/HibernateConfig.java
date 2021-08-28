@@ -1,5 +1,9 @@
 package com.shop.config;
 
+import com.shop.dao.AutoSparePart;
+import com.shop.dao.Category;
+import com.shop.dao.Manufacturer;
+import com.shop.dao.PartType;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +22,18 @@ public class HibernateConfig {
     @Bean("sessionFactory")
     public SessionFactory getSessionFactory() {
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
+
+        initMappings(configuration);
         configuration.setProperties(createProps());
 
         return configuration.buildSessionFactory();
+    }
+
+    private void initMappings(org.hibernate.cfg.Configuration configuration) {
+        configuration.addAnnotatedClass(Category.class);
+        configuration.addAnnotatedClass(PartType.class);
+        configuration.addAnnotatedClass(AutoSparePart.class);
+        configuration.addAnnotatedClass(Manufacturer.class);
     }
 
     private Properties createProps() {
@@ -31,6 +44,7 @@ public class HibernateConfig {
         properties.setProperty("hibernate.connection.username", USERNAME);
         properties.setProperty("hibernate.connection.password", PASSWORD);
         properties.setProperty("hibernate.dialect", DIALECT);
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
 
         return properties;
     }
