@@ -1,10 +1,11 @@
 package com.shop.config;
 
-import com.shop.dao.AutoSparePart;
-import com.shop.dao.Category;
-import com.shop.dao.Manufacturer;
-import com.shop.dao.PartType;
+import com.shop.model.Good;
+import com.shop.model.Category;
+import com.shop.model.Manufacturer;
+import com.shop.model.GoodType;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Environment;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,20 +32,20 @@ public class HibernateConfig {
 
     private void initMappings(org.hibernate.cfg.Configuration configuration) {
         configuration.addAnnotatedClass(Category.class);
-        configuration.addAnnotatedClass(PartType.class);
-        configuration.addAnnotatedClass(AutoSparePart.class);
+        configuration.addAnnotatedClass(GoodType.class);
+        configuration.addAnnotatedClass(Good.class);
         configuration.addAnnotatedClass(Manufacturer.class);
     }
 
     private Properties createProps() {
         Properties properties = new Properties();
 
-        properties.setProperty("hibernate.connection.driver_class", DRIVER_NAME);
-        properties.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/" + DATABASE_NAME + "?createDatabaseIfNotExist=true&serverTimezone=UTC");
-        properties.setProperty("hibernate.connection.username", USERNAME);
-        properties.setProperty("hibernate.connection.password", PASSWORD);
-        properties.setProperty("hibernate.dialect", DIALECT);
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty(Environment.DRIVER, DRIVER_NAME);
+        properties.setProperty(Environment.URL, "jdbc:mysql://localhost:3306/" + DATABASE_NAME + "?createDatabaseIfNotExist=true&serverTimezone=UTC");
+        properties.setProperty(Environment.USER, USERNAME);
+        properties.setProperty(Environment.PASS, PASSWORD);
+        properties.setProperty(Environment.DIALECT, DIALECT);
+        properties.setProperty(Environment.HBM2DDL_AUTO, "update");
 
         return properties;
     }

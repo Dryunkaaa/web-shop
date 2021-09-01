@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Editing of category</title>
+</head>
+<body>
+<h1 th:text="'Editing category by name - ' + ${category.getName()}">Editing</h1>
+
+<form th:action="@{/admin/category/edit}" method="post">
+    <input type="text" placeholder="Category name" name="categoryName" th:value="${category.getName()}">
+    <input type="hidden" name="categoryId" th:value="${category.getId()}">
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>

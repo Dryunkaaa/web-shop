@@ -1,11 +1,11 @@
-package com.shop.dao;
+package com.shop.model;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "auto_spare_part")
-public class AutoSparePart {
+@Table(name = "goods")
+public class Good {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +19,8 @@ public class AutoSparePart {
     private long price;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "part_type_id", nullable = false)
-    private PartType partType;
+    @JoinColumn(name = "good_type_id", nullable = false)
+    private GoodType goodType;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "manufacturer_id", nullable = false)
@@ -54,12 +54,12 @@ public class AutoSparePart {
         this.price = price;
     }
 
-    public PartType getPartType() {
-        return partType;
+    public GoodType getGoodType() {
+        return goodType;
     }
 
-    public void setPartType(PartType partType) {
-        this.partType = partType;
+    public void setGoodType(GoodType goodType) {
+        this.goodType = goodType;
     }
 
     public Manufacturer getManufacturer() {
@@ -82,7 +82,7 @@ public class AutoSparePart {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AutoSparePart that = (AutoSparePart) o;
+        Good that = (Good) o;
         return id == that.id;
     }
 

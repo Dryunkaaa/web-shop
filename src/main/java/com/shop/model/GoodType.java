@@ -1,12 +1,12 @@
-package com.shop.dao;
+package com.shop.model;
 
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "category")
-public class Category {
+@Table(name = "good_types")
+public class GoodType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +16,12 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private Set<PartType> partsSet;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @OneToMany(mappedBy = "goodType")
+    private Set<Good> goods;
 
 
     public long getId() {
@@ -36,20 +40,28 @@ public class Category {
         this.name = name;
     }
 
-    public Set<PartType> getPartsSet() {
-        return partsSet;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setPartsSet(Set<PartType> partsSet) {
-        this.partsSet = partsSet;
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Set<Good> getGoods() {
+        return goods;
+    }
+
+    public void setGoods(Set<Good> goods) {
+        this.goods = goods;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return id == category.id;
+        GoodType goodType = (GoodType) o;
+        return id == goodType.id;
     }
 
     @Override

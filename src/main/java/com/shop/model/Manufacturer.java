@@ -1,12 +1,12 @@
-package com.shop.dao;
+package com.shop.model;
 
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "part_type")
-public class PartType {
+@Table(name = "manufacturers")
+public class Manufacturer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +16,8 @@ public class PartType {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    @OneToMany(mappedBy = "partType")
-    private Set<AutoSparePart> autoSpareParts;
+    @OneToMany(mappedBy = "manufacturer")
+    private Set<Good> goods;
 
 
     public long getId() {
@@ -40,28 +36,20 @@ public class PartType {
         this.name = name;
     }
 
-    public Category getCategory() {
-        return category;
+    public Set<Good> getGoods() {
+        return goods;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Set<AutoSparePart> getAutoSpareParts() {
-        return autoSpareParts;
-    }
-
-    public void setAutoSpareParts(Set<AutoSparePart> autoSpareParts) {
-        this.autoSpareParts = autoSpareParts;
+    public void setGoods(Set<Good> goods) {
+        this.goods = goods;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PartType partType = (PartType) o;
-        return id == partType.id;
+        Manufacturer that = (Manufacturer) o;
+        return id == that.id;
     }
 
     @Override

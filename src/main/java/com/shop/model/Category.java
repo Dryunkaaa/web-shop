@@ -1,12 +1,12 @@
-package com.shop.dao;
+package com.shop.model;
 
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "manufacturer")
-public class Manufacturer {
+@Table(name = "categories")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +16,8 @@ public class Manufacturer {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "manufacturer")
-    private Set<AutoSparePart> autoSpareParts;
+    @OneToMany(mappedBy = "category")
+    private Set<GoodType> partsSet;
 
 
     public long getId() {
@@ -36,20 +36,20 @@ public class Manufacturer {
         this.name = name;
     }
 
-    public Set<AutoSparePart> getAutoSpareParts() {
-        return autoSpareParts;
+    public Set<GoodType> getPartsSet() {
+        return partsSet;
     }
 
-    public void setAutoSpareParts(Set<AutoSparePart> autoSpareParts) {
-        this.autoSpareParts = autoSpareParts;
+    public void setPartsSet(Set<GoodType> partsSet) {
+        this.partsSet = partsSet;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Manufacturer that = (Manufacturer) o;
-        return id == that.id;
+        Category category = (Category) o;
+        return id == category.id;
     }
 
     @Override

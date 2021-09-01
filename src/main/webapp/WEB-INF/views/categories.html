@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+</head>
+<body>
+<form action="/admin/category/add">
+    <button type="submit">Add</button>
+</form>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+    </tr>
+    <tr th:each="category : ${categories}">
+        <td th:text="${category.getId()}">ID</td>
+        <td th:text="${category.getName()}">Name</td>
+        <td>
+            <form th:action="@{/admin/category/remove}" method="post">
+                <input type="hidden" th:value="${category.getId()}" name="categoryId"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/admin/category/edit}" method="get">
+                <input type="hidden" th:value="${category.getId()}" name="categoryId"/>
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
