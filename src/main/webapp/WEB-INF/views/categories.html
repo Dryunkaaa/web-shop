@@ -15,17 +15,17 @@
         <th>NAME</th>
     </tr>
     <tr th:each="category : ${categories}">
-        <td th:text="${category.getId()}">ID</td>
-        <td th:text="${category.getName()}">Name</td>
+        <td th:text="${category.id}">ID</td>
+        <td th:text="${category.name}">Name</td>
         <td>
             <form th:action="@{/admin/category/remove}" method="post">
-                <input type="hidden" th:value="${category.getId()}" name="categoryId"/>
+                <input type="hidden" th:value="${category.id}" name="categoryId"/>
                 <button type="submit">Delete</button>
             </form>
         </td>
         <td>
             <form th:action="@{/admin/category/edit}" method="get">
-                <input type="hidden" th:value="${category.getId()}" name="categoryId"/>
+                <input type="hidden" th:value="${category.id}" name="categoryId"/>
                 <button type="submit">Edit</button>
             </form>
         </td>

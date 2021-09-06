@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Good Types</title>
+</head>
+<body>
+<form action="/admin/good-type/add">
+    <button type="submit">Add</button>
+</form>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+    </tr>
+    <tr th:each="goodType : ${goodTypes}">
+        <td th:text="${goodType.id}">ID</td>
+        <td th:text="${goodType.name}">Name</td>
+        <td>
+            <form th:action="@{/admin/good-type/remove}" method="post">
+                <input type="hidden" th:value="${goodType.id}" name="goodTypeId"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/admin/good-type/edit}" method="get">
+                <input type="hidden" th:value="${goodType.id}" name="goodTypeId"/>
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

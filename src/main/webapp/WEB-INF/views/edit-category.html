@@ -5,11 +5,11 @@
     <title>Editing of category</title>
 </head>
 <body>
-<h1 th:text="'Editing category by name - ' + ${category.getName()}">Editing</h1>
+<h1 th:text="'Editing category by name - ' + ${category.name}">Editing</h1>
 
 <form th:action="@{/admin/category/edit}" method="post">
-    <input type="text" placeholder="Category name" name="categoryName" th:value="${category.getName()}">
-    <input type="hidden" name="categoryId" th:value="${category.getId()}">
+    <input type="text" placeholder="Category name" name="categoryName" th:value="${category.name}">
+    <input type="hidden" name="categoryId" th:value="${category.id}">
     <button type="submit">Submit</button>
 </form>
 </body>

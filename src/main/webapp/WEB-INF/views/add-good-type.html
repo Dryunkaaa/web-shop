@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Adding type of good</title>
+</head>
+<body>
+<h1>Adding a type of good</h1>
+
+<form action="/admin/good-type/add" method='post'>
+    <input type="text" placeholder="Name" name="type-name">
+    <select name="categoryId">
+        <option disabled>Choose category</option>
+        <option th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}"/>
+    </select>
+
+    <button type="submit">Add</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Editing of good type</title>
+</head>
+<body>
+<h1 th:text="'Editing good type by name - ' + ${goodType.getName()}"></h1>
+
+<form th:action="@{/admin/good-type/edit}" method="post">
+    <input type="text" placeholder="Name of type of good" name="goodTypeName" th:value="${goodType.name}">
+    <input type="hidden" name="goodTypeId" th:value="${goodType.id}">
+    <select name="categoryId">
+        <option disabled>Choose category</option>
+        <option th:each="category : ${categories}"
+                th:value="${category.id}"
+                th:text="${category.name}"
+                th:selected="${goodType.category.id == category.id}"/>
+    </select>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
