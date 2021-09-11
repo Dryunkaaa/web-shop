@@ -34,13 +34,13 @@ public class GoodTypeController {
     public String list(Model model) {
         model.addAttribute("goodTypes", goodTypeDao.findAll());
 
-        return "good-types";
+        return "admin/good-type/good-types";
     }
 
     @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("categories", categoryDao.findAll());
-        return "add-good-type";
+        return "admin/good-type/add-good-type";
     }
 
     @PostMapping("/add")
@@ -65,7 +65,7 @@ public class GoodTypeController {
         model.addAttribute("goodType", goodTypeDao.findEntity(goodTypeId));
         model.addAttribute("categories", categoryDao.findAll());
 
-        return "edit-good-type";
+        return "admin/good-type/edit-good-type";
     }
 
     @PostMapping("/edit")

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Editing of manufacturer</title>
+</head>
+<body>
+<h1 th:text="'Editing manufacturer by name - ' + ${manufacturer.name}">Editing</h1>
+
+<form th:action="@{/admin/manufacturer/edit}" method="post">
+    <input type="text" placeholder="Manufacturer name" name="manufacturerName" th:value="${manufacturer.name}">
+    <input type="hidden" name="manufacturerId" th:value="${manufacturer.id}">
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>

@@ -26,12 +26,12 @@ public class CategoryController {
     public String list(Model model) {
         model.addAttribute("categories", categoryDao.findAll());
 
-        return "categories";
+        return "admin/category/categories";
     }
 
     @GetMapping("/add")
     public String add() {
-        return "add-category";
+        return "admin/category/add-category";
     }
 
     @PostMapping("/add")
@@ -52,7 +52,7 @@ public class CategoryController {
     @GetMapping("/edit")
     public String edit(@RequestParam(name = "categoryId") long categoryId, Model model) {
         model.addAttribute("category", categoryDao.findEntity(categoryId));
-        return "edit-category";
+        return "admin/category/edit-category";
     }
 
     @PostMapping("/edit")

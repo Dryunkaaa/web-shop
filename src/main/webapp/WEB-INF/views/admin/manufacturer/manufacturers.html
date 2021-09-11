@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Manufacturers</title>
+</head>
+<body>
+<form action="/admin/manufacturer/add">
+    <button type="submit">Add</button>
+</form>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+    </tr>
+    <tr th:each="manufacturer : ${manufacturers}">
+        <td th:text="${manufacturer.id}">ID</td>
+        <td th:text="${manufacturer.name}">Name</td>
+        <td>
+            <form th:action="@{/admin/manufacturer/remove}" method="post">
+                <input type="hidden" th:value="${manufacturer.id}" name="manufacturerId"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/admin/manufacturer/edit}" method="get">
+                <input type="hidden" th:value="${manufacturer.id}" name="manufacturerId"/>
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
