@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Goods</title>
+</head>
+<body>
+<form action="/admin/good/add">
+    <button type="submit">Add</button>
+</form>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>NAME</th>
+        <th>PRICE</th>
+        <th>MODEL</th>
+    </tr>
+    <tr th:each="good : ${goods}">
+        <td th:text="${good.id}">ID</td>
+        <td th:text="${good.name}">Name</td>
+        <td th:text="${good.price}">Price</td>
+        <td th:text="${good.model}">Model</td>
+        <td>
+            <form th:action="@{/admin/good/remove}" method="post">
+                <input type="hidden" th:value="${good.id}" name="goodId"/>
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/admin/good/edit}" method="get">
+                <input type="hidden" th:value="${good.id}" name="goodId"/>
+                <button type="submit">Edit</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

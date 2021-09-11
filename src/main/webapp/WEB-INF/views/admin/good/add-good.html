@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Good adding</title>
+</head>
+<body>
+<form action="/admin/good/add" method="post">
+    <h1>Enter name of good</h1>
+    <input type="text" placeholder="name" name="name">
+    <h1>Enter price of good</h1>
+    <input type="number" placeholder="price" name="price">
+    <h1>Enter model of good</h1>
+    <input type="text" placeholder="model" name="model">
+
+    <h1>Select type of good</h1>
+    <select name="goodTypeId">
+        <option disabled>Choose type of good</option>
+        <option th:each="goodType : ${goodTypes}"
+                th:value="${goodType.id}"
+                th:text="${goodType.name}"/>
+    </select>
+
+    <h1>Select a manufacturer</h1>
+    <select name="manufacturerId">
+        <option disabled>Choose manufacturer</option>
+        <option th:each="manufacturer : ${manufacturers}"
+                th:value="${manufacturer.id}"
+                th:text="${manufacturer.name}"/>
+    </select>
+
+    <button type="submit">OK</button>
+</form>
+</body>
+</html>

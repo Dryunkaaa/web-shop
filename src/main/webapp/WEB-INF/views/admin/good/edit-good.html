@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Editing of good</title>
+</head>
+<body>
+<h1 th:text="'Editing good by name - ' + ${good.name}">Editing</h1>
+
+<form th:action="@{/admin/good/edit}" method="post">
+    <h1>Name</h1>
+    <input type="text" placeholder="Good name" name="name" th:value="${good.name}">
+
+    <h1>Price</h1>
+    <input type="number" placeholder="Price of good" name="price" th:value="${good.price}">
+
+    <h1>Model</h1>
+    <input type="text" placeholder="Model of good" name="model" th:value="${good.model}">
+
+    <h1>Type of good</h1>
+    <select name="goodTypeId">
+        <option disabled>Choose type of good</option>
+        <option th:each="goodType : ${goodTypes}"
+                th:value="${goodType.id}"
+                th:text="${goodType.name}"/>
+    </select>
+
+    <h1>Manufacturer</h1>
+    <select name="manufacturerId">
+        <option disabled>Choose manufacturer</option>
+        <option th:each="manufacturer : ${manufacturers}"
+                th:value="${manufacturer.id}"
+                th:text="${manufacturer.name}"/>
+    </select>
+
+    <input type="hidden" name="goodId" th:value="${good.id}">
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
