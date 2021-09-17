@@ -1,70 +1,62 @@
 package com.shop.controller.admin;
 
-import com.shop.dao.GenericDao;
 import com.shop.model.Category;
+import com.shop.service.jpa.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/category/")
 public class CategoryController {
 
-    private GenericDao<Category> categoryDao;
+    private CategoryService categoryService;
 
     @Autowired
-    public void setCategoryDao(GenericDao<Category> categoryDao) {
-        this.categoryDao = categoryDao;
-        categoryDao.setClazz(Category.class);
+    public void setCategoryService(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("categories", categoryDao.findAll());
-
+        model.addAttribute("categories", categoryService.findAll());
         return "admin/category/categories";
     }
 
     @GetMapping("/add")
-    public String add() {
-        return "admin/category/add-category";
+    public String add(@ModelAttribute(name = "error") String error, Model model) {
+        model.addAttribute("error", error);
+        return "admin/category/category_adding";
     }
 
     @PostMapping("/add")
-    public String addCategory(@RequestParam(name = "categoryName") String categoryName) {
+    public String addCategory(@RequestParam(name = "name") String name) {
         Category category = new Category();
-        category.setName(categoryName);
-        categoryDao.create(category);
+        category.setName(name);
+        categoryService.save(category);
 
         return "redirect:/admin/category/list";
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam(name = "categoryId") long categoryId) {
-        categoryDao.deleteById(categoryId);
+    public String remove(@RequestParam(name = "id") long id) {
+        categoryService.deleteById(id);
         return "redirect:/admin/category/list";
     }
 
     @GetMapping("/edit")
-    public String edit(@RequestParam(name = "categoryId") long categoryId, Model model) {
-        model.addAttribute("category", categoryDao.findEntity(categoryId));
-        return "admin/category/edit-category";
+    public String edit(@ModelAttribute(name = "error") String error,
+                       @RequestParam(name = "id") long id,
+                       Model model) {
+        model.addAttribute("error", error);
+        model.addAttribute("category", categoryService.getById(id));
+        return "admin/category/category_editing";
     }
 
     @PostMapping("/edit")
-    public String submitEditing(
-            @RequestParam(name = "categoryName") String categoryName,
-            @RequestParam(name = "categoryId") long categoryId) {
-
-        Category category = categoryDao.findEntity(categoryId);
-        category.setName(categoryName);
-
-        categoryDao.update(category);
-
+    public String submitEditing(@ModelAttribute Category editingCategory) {
+        categoryService.update(editingCategory);
         return "redirect:/admin/category/list";
     }
 }

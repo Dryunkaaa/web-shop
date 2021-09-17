@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Category adding</title>
 </head>
 <body>
+
+<h1 th:if="${error != null && !error.isEmpty()}" th:text="'Error - [' + ${error} + ']'"></h1>
 <form action="/admin/category/add" method="post">
     <h1>Enter category name</h1>
-    <input type="text" placeholder="name" name="categoryName">
+    <input type="text" placeholder="name" name="name">
 
     <button type="submit">OK</button>
 </form>

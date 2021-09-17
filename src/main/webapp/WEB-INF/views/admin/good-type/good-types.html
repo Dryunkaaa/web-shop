@@ -19,13 +19,13 @@
         <td th:text="${goodType.name}">Name</td>
         <td>
             <form th:action="@{/admin/good-type/remove}" method="post">
-                <input type="hidden" th:value="${goodType.id}" name="goodTypeId"/>
+                <input type="hidden" th:value="${goodType.id}" name="id"/>
                 <button type="submit">Delete</button>
             </form>
         </td>
         <td>
             <form th:action="@{/admin/good-type/edit}" method="get">
-                <input type="hidden" th:value="${goodType.id}" name="goodTypeId"/>
+                <input type="hidden" th:value="${goodType.id}" name="id"/>
                 <button type="submit">Edit</button>
             </form>
         </td>

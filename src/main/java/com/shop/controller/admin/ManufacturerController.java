@@ -1,70 +1,62 @@
 package com.shop.controller.admin;
 
-import com.shop.dao.GenericDao;
 import com.shop.model.Manufacturer;
+import com.shop.service.jpa.ManufacturerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/manufacturer")
 public class ManufacturerController {
 
-    private GenericDao<Manufacturer> manufacturerDao;
+    private ManufacturerService manufacturerService;
 
     @Autowired
-    public void setManufacturerDao(GenericDao<Manufacturer> manufacturerDao) {
-        this.manufacturerDao = manufacturerDao;
-        manufacturerDao.setClazz(Manufacturer.class);
+    public void setManufacturerService(ManufacturerService manufacturerService) {
+        this.manufacturerService = manufacturerService;
     }
 
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("manufacturers", manufacturerDao.findAll());
-
+        model.addAttribute("manufacturers", manufacturerService.findAll());
         return "admin/manufacturer/manufacturers";
     }
 
     @GetMapping("/add")
-    public String add() {
-        return "admin/manufacturer/add-manufacturer";
+    public String add(@ModelAttribute(name = "error") String error, Model model) {
+        model.addAttribute("error", error);
+        return "admin/manufacturer/manufacturer_adding";
     }
 
     @PostMapping("/add")
-    public String addCategory(@RequestParam(name = "manufacturerName") String manufacturerName) {
+    public String addCategory(@RequestParam(name = "name") String name) {
         Manufacturer manufacturer = new Manufacturer();
-        manufacturer.setName(manufacturerName);
-        manufacturerDao.create(manufacturer);
+        manufacturer.setName(name);
+        manufacturerService.save(manufacturer);
 
         return "redirect:/admin/manufacturer/list";
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam(name = "manufacturerId") long manufacturerId) {
-        manufacturerDao.deleteById(manufacturerId);
+    public String remove(@RequestParam(name = "id") long id) {
+        manufacturerService.deleteById(id);
         return "redirect:/admin/manufacturer/list";
     }
 
     @GetMapping("/edit")
-    public String edit(@RequestParam(name = "manufacturerId") long manufacturerId, Model model) {
-        model.addAttribute("manufacturer", manufacturerDao.findEntity(manufacturerId));
-        return "admin/manufacturer/edit-manufacturer";
+    public String edit(@ModelAttribute(name = "error") String error,
+                       @RequestParam(name = "id") long id,
+                       Model model) {
+        model.addAttribute("error", error);
+        model.addAttribute("manufacturer", manufacturerService.getById(id));
+        return "admin/manufacturer/manufacturer_editing";
     }
 
     @PostMapping("/edit")
-    public String submitEditing(
-            @RequestParam(name = "manufacturerName") String manufacturerName,
-            @RequestParam(name = "manufacturerId") long manufacturerId) {
-
-        Manufacturer manufacturer = manufacturerDao.findEntity(manufacturerId);
-        manufacturer.setName(manufacturerName);
-
-        manufacturerDao.update(manufacturer);
-
+    public String submitEditing(@ModelAttribute Manufacturer manufacturer) {
+        manufacturerService.update(manufacturer);
         return "redirect:/admin/manufacturer/list";
     }
 }

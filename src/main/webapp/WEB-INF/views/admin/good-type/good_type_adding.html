@@ -5,10 +5,11 @@
     <title>Adding type of good</title>
 </head>
 <body>
+<h1 th:if="${error != null && !error.isEmpty()}" th:text="'Error - [' + ${error} + ']'"></h1>
 <h1>Adding a type of good</h1>
 
 <form action="/admin/good-type/add" method='post'>
-    <input type="text" placeholder="Name" name="type-name">
+    <input type="text" placeholder="Name" name="name">
     <select name="categoryId">
         <option disabled>Choose category</option>
         <option th:each="category : ${categories}"

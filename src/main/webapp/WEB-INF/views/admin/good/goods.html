@@ -23,13 +23,13 @@
         <td th:text="${good.model}">Model</td>
         <td>
             <form th:action="@{/admin/good/remove}" method="post">
-                <input type="hidden" th:value="${good.id}" name="goodId"/>
+                <input type="hidden" th:value="${good.id}" name="id"/>
                 <button type="submit">Delete</button>
             </form>
         </td>
         <td>
             <form th:action="@{/admin/good/edit}" method="get">
-                <input type="hidden" th:value="${good.id}" name="goodId"/>
+                <input type="hidden" th:value="${good.id}" name="id"/>
                 <button type="submit">Edit</button>
             </form>
         </td>

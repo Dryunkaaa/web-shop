@@ -5,6 +5,7 @@
     <title>Editing of good</title>
 </head>
 <body>
+<h1 th:if="${error != null && !error.isEmpty()}" th:text="'Error - [' + ${error} + ']'"></h1>
 <h1 th:text="'Editing good by name - ' + ${good.name}">Editing</h1>
 
 <form th:action="@{/admin/good/edit}" method="post">
@@ -33,7 +34,7 @@
                 th:text="${manufacturer.name}"/>
     </select>
 
-    <input type="hidden" name="goodId" th:value="${good.id}">
+    <input type="hidden" name="id" th:value="${good.id}">
     <button type="submit">Submit</button>
 </form>
 </body>

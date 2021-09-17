@@ -12,7 +12,7 @@ public abstract class AbstractDao<T> {
     private Class<T> clazz;
 
     @Autowired
-    private SessionFactory sessionFactory;
+    protected SessionFactory sessionFactory;
 
     public void setClazz(Class<T> clazz) {
         this.clazz = clazz;

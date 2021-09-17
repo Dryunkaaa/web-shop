@@ -5,6 +5,8 @@
     <title>Good adding</title>
 </head>
 <body>
+<h1 th:if="${error != null && !error.isEmpty()}" th:text="'Error - [' + ${error} + ']'"></h1>
+
 <form action="/admin/good/add" method="post">
     <h1>Enter name of good</h1>
     <input type="text" placeholder="name" name="name">

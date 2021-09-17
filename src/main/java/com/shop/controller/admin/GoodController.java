@@ -1,102 +1,89 @@
 package com.shop.controller.admin;
 
-import com.shop.dao.GenericDao;
 import com.shop.model.Good;
-import com.shop.model.GoodType;
-import com.shop.model.Manufacturer;
+import com.shop.service.jpa.GoodService;
+import com.shop.service.jpa.GoodTypeService;
+import com.shop.service.jpa.ManufacturerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/good")
 public class GoodController {
 
-    private GenericDao<Good> goodDao;
-    private GenericDao<GoodType> goodTypeDao;
-    private GenericDao<Manufacturer> manufacturerDao;
+    private GoodService goodService;
+    private GoodTypeService goodTypeService;
+    private ManufacturerService manufacturerService;
 
     @Autowired
-    public void setGoodDao(GenericDao<Good> goodDao) {
-        this.goodDao = goodDao;
-        goodDao.setClazz(Good.class);
+    public void setGoodService(GoodService goodService) {
+        this.goodService = goodService;
     }
 
     @Autowired
-    public void setGoodTypeDao(GenericDao<GoodType> goodTypeDao) {
-        this.goodTypeDao = goodTypeDao;
-        goodTypeDao.setClazz(GoodType.class);
+    public void setGoodTypeService(GoodTypeService goodTypeService) {
+        this.goodTypeService = goodTypeService;
     }
 
     @Autowired
-    public void setManufacturerDao(GenericDao<Manufacturer> manufacturerDao) {
-        this.manufacturerDao = manufacturerDao;
-        manufacturerDao.setClazz(Manufacturer.class);
+    public void setManufacturerService(ManufacturerService manufacturerService) {
+        this.manufacturerService = manufacturerService;
     }
 
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("goods", goodDao.findAll());
-
+        model.addAttribute("goods", goodService.findAll());
         return "admin/good/goods";
     }
 
     @GetMapping("/add")
-    public String add(Model model) {
-        model.addAttribute("goodTypes", goodTypeDao.findAll());
-        model.addAttribute("manufacturers", manufacturerDao.findAll());
-        return "admin/good/add-good";
+    public String add(@ModelAttribute(name = "error") String error, Model model) {
+        model.addAttribute("error", error);
+        model.addAttribute("goodTypes", goodTypeService.findAll());
+        model.addAttribute("manufacturers", manufacturerService.findAll());
+        return "admin/good/good_adding";
     }
 
     @PostMapping("/add")
-    public String addCategory(@RequestParam String name, @RequestParam Long price,
-                              @RequestParam String model, @RequestParam long goodTypeId,
+    public String addCategory(@ModelAttribute Good good,
+                              @RequestParam long goodTypeId,
                               @RequestParam long manufacturerId) {
-        Good good = new Good();
-        good.setName(name);
-        good.setPrice(price);
-        good.setModel(model);
-        good.setGoodType(goodTypeDao.findEntity(goodTypeId));
-        good.setManufacturer(manufacturerDao.findEntity(manufacturerId));
-        goodDao.create(good);
+        good.setGoodType(goodTypeService.getById(goodTypeId));
+        good.setManufacturer(manufacturerService.getById(manufacturerId));
+        goodService.save(good);
 
         return "redirect:/admin/good/list";
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam(name = "goodId") long goodId) {
-        goodDao.deleteById(goodId);
+    public String remove(@RequestParam(name = "id") long id) {
+        goodService.deleteById(id);
         return "redirect:/admin/good/list";
     }
 
     @GetMapping("/edit")
-    public String edit(@RequestParam(name = "goodId") long goodId, Model model) {
-        model.addAttribute("good", goodDao.findEntity(goodId));
-        model.addAttribute("manufacturers", manufacturerDao.findAll());
-        model.addAttribute("goodTypes", goodTypeDao.findAll());
+    public String edit(@ModelAttribute(name = "error") String error,
+                       @RequestParam(name = "id") long id,
+                       Model model) {
+        model.addAttribute("error", error);
+        model.addAttribute("good", goodService.getById(id));
+        model.addAttribute("manufacturers", manufacturerService.findAll());
+        model.addAttribute("goodTypes", goodTypeService.findAll());
 
-        return "admin/good/edit-good";
+        return "admin/good/good_editing";
     }
 
     @PostMapping("/edit")
-    public String submitEditing(@RequestParam String name, @RequestParam Long price,
-            @RequestParam String model, @RequestParam long goodTypeId,
-            @RequestParam long manufacturerId,
-            @RequestParam(name = "goodId") long goodId) {
+    public String submitEditing(@ModelAttribute Good good,
+                                @RequestParam long goodTypeId,
+                                @RequestParam long manufacturerId) {
 
-        Good good = goodDao.findEntity(goodId);
-        good.setName(name);
-        good.setPrice(price);
-        good.setModel(model);
-        good.setManufacturer(manufacturerDao.findEntity(manufacturerId));
-        good.setGoodType(goodTypeDao.findEntity(goodTypeId));
+        good.setManufacturer(manufacturerService.getById(manufacturerId));
+        good.setGoodType(goodTypeService.getById(goodTypeId));
 
-        goodDao.update(good);
-
+        goodService.update(good);
         return "redirect:/admin/good/list";
     }
 }

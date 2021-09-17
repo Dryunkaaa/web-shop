@@ -19,13 +19,13 @@
         <td th:text="${category.name}">Name</td>
         <td>
             <form th:action="@{/admin/category/remove}" method="post">
-                <input type="hidden" th:value="${category.id}" name="categoryId"/>
+                <input type="hidden" th:value="${category.id}" name="id"/>
                 <button type="submit">Delete</button>
             </form>
         </td>
         <td>
             <form th:action="@{/admin/category/edit}" method="get">
-                <input type="hidden" th:value="${category.id}" name="categoryId"/>
+                <input type="hidden" th:value="${category.id}" name="id"/>
                 <button type="submit">Edit</button>
             </form>
         </td>
