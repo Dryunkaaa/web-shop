@@ -7,6 +7,8 @@ import com.shop.controller.admin.ManufacturerController;
 import com.shop.exception.InvalidDataException;
 import com.shop.exception.RecordExistsException;
 import com.shop.service.request.UrlService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,11 +21,17 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice(assignableTypes = {CategoryController.class, GoodTypeController.class, GoodController.class, ManufacturerController.class})
 public class ControllerExceptionHandler {
 
-    @Autowired
+    private Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
     private UrlService urlService;
+
+    @Autowired
+    public void setUrlService(UrlService urlService) {
+        this.urlService = urlService;
+    }
 
     @ExceptionHandler({InvalidDataException.class, RecordExistsException.class})
     public ModelAndView handleFillingError(HttpServletRequest request, Exception ex, RedirectAttributes redirectAttributes) {
+        logger.info("Handle exception during filling fields. Exception type: {}, message - [{}].", ex.getClass().getTypeName(), ex.getMessage());
         redirectAttributes.addFlashAttribute("error", ex.getMessage());
         return new ModelAndView(new RedirectView(urlService.getUrlPath(request), true));
     }

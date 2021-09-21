@@ -6,6 +6,8 @@ import com.shop.model.Manufacturer;
 import com.shop.model.GoodType;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,6 +15,8 @@ import java.util.Properties;
 
 @Configuration
 public class HibernateConfig {
+
+    private Logger logger = LoggerFactory.getLogger(HibernateConfig.class);
 
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
     private static final String DATABASE_NAME = "auto_parts_store";
@@ -27,6 +31,7 @@ public class HibernateConfig {
         initMappings(configuration);
         configuration.setProperties(createProps());
 
+        logger.info("Building session factory.");
         return configuration.buildSessionFactory();
     }
 
