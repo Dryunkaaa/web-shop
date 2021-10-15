@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="container">
+    <h1>Enter category name</h1>
+    <input type="text" placeholder="name" id="categoryName">
+
+    <button onclick="add()">OK</button>
+</div>
+
+<script>
+    function add() {
+        var name = $("#categoryName").val();
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            url: "http://localhost:8888/admin/category/add",
+            data: name,
+            cache: false,
+            success: [
+                function (category) {
+                    alert(category.name);
+                }
+            ],
+            error: function(xhr, status, error) {
+                alert(JSON.stringify(xhr.responseText));
+            }
+        });
+    }
+</script>
+</body>
+</html>

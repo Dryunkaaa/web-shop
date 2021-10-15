@@ -5,6 +5,9 @@ import com.shop.service.jpa.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,28 +32,16 @@ public class CategoryController {
         return "admin/category/categories";
     }
 
-    @GetMapping("/add")
-    public String add(@ModelAttribute(name = "error") String error, Model model) {
-        logger.info("Adding a category.");
-        model.addAttribute("error", error);
-        return "admin/category/category_adding";
+    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+        return new ResponseEntity<>(categoryService.save(category), HttpStatus.OK);
     }
 
-    @PostMapping("/add")
-    public String doAdd(@RequestParam(name = "name") String name) {
-        logger.info("Try to add a category by name - [{}]", name);
-        Category category = new Category();
-        category.setName(name);
-        categoryService.save(category);
-
-        return "redirect:/admin/category/list";
-    }
-
-    @PostMapping("/remove")
-    public String remove(@RequestParam(name = "id") long id) {
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> remove(@RequestBody String id) {
         logger.info("Remove category by id - {}", id);
-        categoryService.deleteById(id);
-        return "redirect:/admin/category/list";
+        categoryService.deleteById(Long.parseLong(id));
+        return new ResponseEntity<>("Removed.", HttpStatus.OK);
     }
 
     @GetMapping("/edit")

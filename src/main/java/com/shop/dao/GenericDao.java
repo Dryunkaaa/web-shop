@@ -10,7 +10,7 @@ public interface GenericDao<T> {
 
     List findAll();
 
-    void create(T entity);
+    T create(T entity);
 
     void update(T entity);
 

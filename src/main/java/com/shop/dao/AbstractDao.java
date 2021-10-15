@@ -34,12 +34,14 @@ public abstract class AbstractDao<T> {
         return resultList;
     }
 
-    public void create(T entity) {
+    public T create(T entity) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(entity);
         transaction.commit();
         session.close();
+
+        return entity;
     }
 
     public void update(T entity) {

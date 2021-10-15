@@ -3,23 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Categories</title>
+    <link rel="icon" href="../../../../resources/images/icon.png">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 <body>
-<form action="/admin/category/add">
-    <button type="submit">Add</button>
+<form id="categoryAdding">
+    <label for="categoryAdding">Enter category name</label>
+    <input type="text" placeholder="name" name="name">
+
+    <button type="submit">OK</button>
 </form>
 
-<table>
+<br>
+<br>
+
+<table id="categoriesTable">
     <tr>
         <th>ID</th>
         <th>NAME</th>
     </tr>
-    <tr th:each="category : ${categories}">
+    <tr th:each="category : ${categories}" th:id="'row' + ${category.id}">
         <td th:text="${category.id}">ID</td>
         <td th:text="${category.name}">Name</td>
         <td>
-            <form th:action="@{/admin/category/remove}" method="post">
-                <input type="hidden" th:value="${category.id}" name="id"/>
+            <form class="removingForms">
+                <input type="hidden" name="id" th:value="${category.id}"/>
                 <button type="submit">Delete</button>
             </form>
         </td>
@@ -31,5 +39,89 @@
         </td>
     </tr>
 </table>
+
+<script>
+    $(document).ready(function () {
+        $("#categoryAdding").submit(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                url: "http://localhost:8888/admin/category/add",
+                data: formDataToJson($(this)),
+                cache: false,
+                success: [
+                    function (category) {
+                        $('#categoriesTable')
+                            .append($('<tr>').attr('id', 'row' + category.id)
+                                .append($('<td>').text(category.id))
+                                .append($('<td>').text(category.name))
+                                .append($('<td>')
+                                    .append($('form')
+                                        .attr('class', 'removingForms')
+                                        .append($('<input>')
+                                            .attr('type', 'hidden')
+                                            .attr('name', 'id')
+                                            .attr('value', category.id))
+                                        .append($('<button>')
+                                            .attr('type', 'submit')
+                                            .text('Delete'))
+                                    ))
+                            );
+
+                        let newRow = '<tr id="row' + category.id + '"><td>' + category.id + '</td><td>' + category.name + '</td><td><form class="removingForms"><input type="hidden" name="id" value="' +
+                            category.id + '"><button type="submit">Delete</button></form></td></tr>';
+
+                        // let newRow = '<tr id="row' + category.id + '"><td>' + category.id + '</td><td>' + category.name + '</td><td><form class="removingForms"><input type="hidden" name="id" value="' +
+                        //     category.id + '"><button type="submit">Delete</button></form></td></tr>';
+                        // $('#categoriesTable > tbody:last-child').append(newRow);
+                        reinitHandlersOnRemove();
+                    }
+                ],
+                error: function (xhr, status, error) {
+                    alert(JSON.stringify(xhr.responseText));
+                }
+            });
+        });
+
+        reinitHandlersOnRemove();
+    });
+
+    function formDataToJson(form) {
+        let data = {};
+        form.serializeArray().map(function (x) {
+            data[x.name] = x.value;
+        });
+
+        return JSON.stringify(data);
+    }
+
+    function reinitHandlersOnRemove() {
+        $(".removingForms").each(function () {
+            $(this).submit(function (event) {
+                event.preventDefault();
+                let passingId = $(this).find('input[name="id"]').val();
+
+                $.ajax({
+                    type: "DELETE",
+                    contentType: "text/plain; charset=utf-8",
+                    url: "http://localhost:8888/admin/category/remove",
+                    data: passingId,
+                    cache: false,
+                    success: [
+                        function () {
+                            $('#row' + passingId).remove();
+                        }
+                    ],
+                    error: function (xhr, status, error) {
+                        alert(JSON.stringify(xhr.responseText));
+                    }
+                });
+            })
+        })
+    }
+</script>
 </body>
 </html>

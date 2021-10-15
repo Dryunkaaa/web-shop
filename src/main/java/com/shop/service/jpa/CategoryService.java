@@ -31,7 +31,7 @@ public class CategoryService {
         this.dataValidator = validator;
     }
 
-    public void save(Category category) {
+    public Category save(Category category) {
         if (dataValidator.isBlankText(category.getName())) {
             logger.warn("Trying to save category with blank name. Name - [{}]", category.getName());
             throw new InvalidDataException("Name of category can't be empty.");
@@ -42,7 +42,7 @@ public class CategoryService {
             throw new RecordExistsException("Category by name [" + category.getName() + "] is already exists.");
         }
 
-        categoryDao.create(category);
+        return categoryDao.create(category);
     }
 
     public List<Category> findAll() {
